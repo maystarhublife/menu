@@ -3,6 +3,9 @@
 
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>MAY STAR MENU</title>
 
 <style>
@@ -268,7 +271,6 @@ function makeItem(item){
 
 
 
-
 //================ LOAD MENU =================
 
 
@@ -291,12 +293,18 @@ function loadMenu(){
 
     script.id="dataScript";
 
-
-   script.src="data.js?nocache=" + Math.random() + "&t=" + Date.now();
+    // Aggressive cache busting - multiple parameters
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 15);
+    script.src = `data.js?t=${timestamp}&r=${random}&v=${Math.random()}`;
 
     script.cache = false;
+    script.setAttribute('cache-control', 'no-cache');
+    
+    // Clear the global menu variable to force fresh data
+    window.menu = undefined;
 
-       script.onload=function(){
+    script.onload=function(){
 
 
         let html="";
@@ -331,6 +339,9 @@ function loadMenu(){
 
     };
 
+    script.onerror=function(){
+        console.error("Failed to load data.js");
+    };
 
 
     document.body.appendChild(script);
@@ -341,15 +352,12 @@ function loadMenu(){
 
 
 // first load
-
 loadMenu();
 
 
 
-// refresh every 30 seconds
-
-setInterval(loadMenu,30000);
-
+// refresh every 5 seconds for fast updates
+setInterval(loadMenu, 5000);
 
 
 
