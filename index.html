@@ -292,10 +292,11 @@ function loadMenu(){
     script.id="dataScript";
 
 
-    script.src="data.js?t="+Date.now();
+   script.src="data.js?nocache=" + Math.random() + "&t=" + Date.now();
 
+    script.cache = false;
 
-    script.onload=function(){
+       script.onload=function(){
 
 
         let html="";
