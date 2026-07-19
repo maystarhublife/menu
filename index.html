@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -268,7 +268,6 @@ function makeItem(item){
 
 
 
-
 //================ LOAD MENU =================
 
 
@@ -291,9 +290,10 @@ function loadMenu(){
 
     script.id="dataScript";
 
+    // Force reload with aggressive cache busting
+    script.src="data.js?nocache=" + Math.random() + "&t=" + Date.now();
 
-    script.src="data.js?t="+Date.now();
-
+    script.cache = false;
 
     script.onload=function(){
 
@@ -330,6 +330,9 @@ function loadMenu(){
 
     };
 
+    script.onerror=function(){
+        console.error("Failed to load data.js");
+    };
 
 
     document.body.appendChild(script);
@@ -340,15 +343,12 @@ function loadMenu(){
 
 
 // first load
-
 loadMenu();
 
 
 
-// refresh every 30 seconds
-
-setInterval(loadMenu,30000);
-
+// refresh every 10 seconds (faster updates)
+setInterval(loadMenu,10000);
 
 
 
