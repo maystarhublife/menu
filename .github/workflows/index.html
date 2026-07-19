@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>MAY STAR MENU</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#111;
+    color:#fff;
+    overflow:hidden;
+}
+
+
+/* ================= HEADER ================= */
+
+.header{
+    height:65px;
+    background:#b30000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 15px;
+}
+
+.company{
+    font-size:30px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.clock{
+    position:absolute;
+    right:15px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+
+/* ================= MENU ================= */
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:6px;
+    height:calc(100vh - 100px);
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4px;
+}
+
+
+.item{
+
+    display:grid;
+
+    grid-template-columns:45px 1fr 120px;
+
+    align-items:center;
+
+    background:#222;
+
+    border-radius:5px;
+
+    padding:4px 8px;
+
+}
+
+
+.no{
+
+    color:#FFD700;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+}
+
+
+.name{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+.status{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    white-space:nowrap;
+
+}
+
+
+.ready{
+
+    color:#00ff66;
+
+}
+
+
+.sold{
+
+    color:#ff3333;
+
+}
+
+
+.empty{
+
+    visibility:hidden;
+
+}
+
+
+/* ================= FOOTER ================= */
+
+
+.footer{
+
+    height:35px;
+
+    background:#b30000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+}
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <div class="company">
+        ⭐ MAY STAR RESTAURANT MENU⭐
+    </div>
+
+    <div class="clock" id="clock"></div>
+
+</div>
+
+
+
+<div class="menu" id="menu"></div>
+
+
+
+<div class="footer">
+
+🔥 HOT MENU DAILY | FRESH & DELICIOUS | THANK YOU ⭐
+
+</div>
+
+
+
+
+<script>
+
+
+//================ CREATE ITEM =================
+
+
+function makeItem(item){
+
+
+    if(!item){
+
+        return '<div class="item empty"></div>';
+
+    }
+
+
+    let status = "";
+    let color = "";
+
+
+    if(item[2].toUpperCase()=="READY"){
+
+        status = "READY";
+        color = "ready";
+
+    }
+    else{
+
+        status = "SOLD OUT";
+        color = "sold";
+
+    }
+
+
+
+    return `
+
+        <div class="item">
+
+
+            <div class="no">
+
+                ${item[0]}
+
+            </div>
+
+
+            <div class="name">
+
+                ${item[1].toUpperCase()}
+
+            </div>
+
+
+            <div class="status ${color}">
+
+                ${status}
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+}
+
+
+
+
+
+//================ LOAD MENU =================
+
+
+function loadMenu(){
+
+
+    let old=document.getElementById("dataScript");
+
+
+    if(old){
+
+        old.remove();
+
+    }
+
+
+
+    let script=document.createElement("script");
+
+
+    script.id="dataScript";
+
+
+    script.src="data.js?t="+Date.now();
+
+
+
+    script.onload=function(){
+
+
+        let html="";
+
+
+        let half=Math.ceil(menu.length/2);
+
+
+
+        for(let i=0;i<half;i++){
+
+
+            html += `
+
+                <div class="row">
+
+                    ${makeItem(menu[i])}
+
+                    ${makeItem(menu[i+half])}
+
+                </div>
+
+            `;
+
+
+        }
+
+
+
+        document.getElementById("menu").innerHTML=html;
+
+
+    };
+
+
+
+    document.body.appendChild(script);
+
+
+}
+
+
+
+// first load
+
+loadMenu();
+
+
+
+// refresh every 30 seconds
+
+setInterval(loadMenu,30000);
+
+
+
+
+
+//================ CLOCK =================
+
+
+function updateClock(){
+
+
+    let now=new Date();
+
+
+
+    document.getElementById("clock").innerHTML =
+
+        now.toLocaleTimeString([],{
+
+            hour:'2-digit',
+
+            minute:'2-digit'
+
+        });
+
+
+}
+
+
+
+updateClock();
+
+
+setInterval(updateClock,1000);
+
+
+
+</script>
+
+
+</body>
+
+</html>
