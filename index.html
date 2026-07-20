@@ -6,6 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+
 <title>MAY STAR MENU</title>
 
 <style>
@@ -16,10 +17,19 @@
     box-sizing:border-box;
 }
 
+html,body{
+    width:100%;
+    height:100%;
+}
+
 body{
     font-family:Arial,Helvetica,sans-serif;
     background:#111;
     color:#fff;
+
+    display:flex;
+    flex-direction:column;
+
     overflow:hidden;
 }
 
@@ -27,67 +37,102 @@ body{
 /* ================= HEADER ================= */
 
 .header{
-    height:65px;
+
+    height:60px;
+
     background:#b30000;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
-    padding:0 15px;
+
+    position:relative;
+
+    flex-shrink:0;
+
 }
 
 .company{
+
     font-size:30px;
+
     font-weight:bold;
+
     letter-spacing:1px;
+
 }
 
 .clock{
+
     position:absolute;
+
     right:15px;
-    font-size:22px;
+
+    font-size:21px;
+
     font-weight:bold;
+
 }
+
 
 
 /* ================= MENU ================= */
 
 .menu{
+
+    flex:1;
+
     display:flex;
+
     flex-direction:column;
-    gap:4px;
-    padding:6px;
-    height:calc(100vh - 100px);
+
+    justify-content:space-evenly;
+
+    padding:3px;
+
+    gap:2px;
+
+    overflow:hidden;
+
 }
 
 .row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:4px;
-}
 
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:3px;
+
+    flex:1;
+
+}
 
 .item{
 
     display:grid;
 
-    grid-template-columns:45px 1fr 120px;
+    grid-template-columns:40px 1fr 110px;
 
     align-items:center;
 
     background:#222;
 
-    border-radius:5px;
+    border-radius:4px;
 
-    padding:4px 8px;
+    padding:1px 6px;
+
+    min-height:0;
 
 }
-
 
 .no{
 
     color:#FFD700;
 
-    font-size:17px;
+    font-size:15px;
 
     font-weight:bold;
 
@@ -95,10 +140,9 @@ body{
 
 }
 
-
 .name{
 
-    font-size:18px;
+    font-size:16px;
 
     font-weight:bold;
 
@@ -110,10 +154,9 @@ body{
 
 }
 
-
 .status{
 
-    font-size:16px;
+    font-size:15px;
 
     font-weight:bold;
 
@@ -123,20 +166,17 @@ body{
 
 }
 
-
 .ready{
 
     color:#00ff66;
 
 }
 
-
 .sold{
 
     color:#ff3333;
 
 }
-
 
 .empty{
 
@@ -145,12 +185,12 @@ body{
 }
 
 
-/* ================= FOOTER ================= */
 
+/* ================= FOOTER ================= */
 
 .footer{
 
-    height:35px;
+    height:30px;
 
     background:#b30000;
 
@@ -160,36 +200,33 @@ body{
 
     justify-content:center;
 
-    font-size:17px;
+    font-size:15px;
 
     font-weight:bold;
+
+    flex-shrink:0;
 
 }
 
 </style>
 
-
 </head>
-
 
 <body>
 
-
 <div class="header">
 
-    <div class="company">
-        ⭐ MAY STAR RESTAURANT MENU⭐
-    </div>
+<div class="company">
 
-    <div class="clock" id="clock"></div>
+⭐ MAY STAR RESTAURANT MENU ⭐
 
 </div>
 
+<div class="clock" id="clock"></div>
 
+</div>
 
 <div class="menu" id="menu"></div>
-
-
 
 <div class="footer">
 
@@ -197,17 +234,11 @@ body{
 
 </div>
 
-
-
-
 <script>
-
 
 //================ CREATE ITEM =================
 
-
 function makeItem(item){
-
 
     if(!item){
 
@@ -215,70 +246,43 @@ function makeItem(item){
 
     }
 
-
-    let status = "";
-    let color = "";
-
+    let status="";
+    let color="";
 
     if(item[2].toUpperCase()=="READY"){
 
-        status = "READY";
-        color = "ready";
+        status="READY";
+        color="ready";
+
+    }else{
+
+        status="SOLD OUT";
+        color="sold";
 
     }
-    else{
-
-        status = "SOLD OUT";
-        color = "sold";
-
-    }
-
-
 
     return `
 
-        <div class="item">
+<div class="item">
 
+<div class="no">${item[0]}</div>
 
-            <div class="no">
+<div class="name">${item[1].toUpperCase()}</div>
 
-                ${item[0]}
+<div class="status ${color}">${status}</div>
 
-            </div>
+</div>
 
-
-            <div class="name">
-
-                ${item[1].toUpperCase()}
-
-            </div>
-
-
-            <div class="status ${color}">
-
-                ${status}
-
-            </div>
-
-
-        </div>
-
-    `;
-
+`;
 
 }
 
 
-
-
 //================ LOAD MENU =================
-
 
 function loadMenu(){
 
-
     let old=document.getElementById("dataScript");
-
 
     if(old){
 
@@ -287,22 +291,23 @@ function loadMenu(){
     }
 
 
-
     let script=document.createElement("script");
-
 
     script.id="dataScript";
 
-    // Aggressive cache busting - multiple parameters
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2, 15);
-    script.src = `data.js?t=${timestamp}&r=${random}&v=${Math.random()}`;
 
-    script.cache = false;
-    script.setAttribute('cache-control', 'no-cache');
-    
-    // Clear the global menu variable to force fresh data
+    const timestamp = Date.now();
+
+    const random = Math.random().toString(36).substring(2,15);
+
+
+    script.src = `data.js?t=${timestamp}&r=${random}`;
+
+    script.cache=false;
+
+
     window.menu = undefined;
+
 
     script.onload=function(){
 
@@ -319,19 +324,17 @@ function loadMenu(){
 
             html += `
 
-                <div class="row">
+            <div class="row">
 
-                    ${makeItem(menu[i])}
+                ${makeItem(menu[i])}
 
-                    ${makeItem(menu[i+half])}
+                ${makeItem(menu[i+half])}
 
-                </div>
+            </div>
 
             `;
 
-
         }
-
 
 
         document.getElementById("menu").innerHTML=html;
@@ -339,8 +342,11 @@ function loadMenu(){
 
     };
 
+
     script.onerror=function(){
-        console.error("Failed to load data.js");
+
+        console.error("Gagal membaca data.js");
+
     };
 
 
@@ -351,13 +357,15 @@ function loadMenu(){
 
 
 
-// first load
+// load pertama
+
 loadMenu();
 
 
 
-// refresh every 5 seconds for fast updates
-setInterval(loadMenu, 5000);
+// refresh data setiap 5 detik
+
+setInterval(loadMenu,5000);
 
 
 
@@ -367,24 +375,21 @@ setInterval(loadMenu, 5000);
 
 function updateClock(){
 
-
     let now=new Date();
-
 
 
     document.getElementById("clock").innerHTML =
 
-        now.toLocaleTimeString([],{
+    now.toLocaleTimeString([],{
 
-            hour:'2-digit',
+        hour:'2-digit',
 
-            minute:'2-digit'
+        minute:'2-digit'
 
-        });
+    });
 
 
 }
-
 
 
 updateClock();
@@ -393,10 +398,11 @@ updateClock();
 setInterval(updateClock,1000);
 
 
-
 </script>
 
 
 </body>
 
 </html>
+
+
